@@ -290,13 +290,30 @@ startSocat(){
 # 	fi
 # 	Save_iptables
 # }
+# runSocat(){
+# 	nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &
+# }
+# addLocal(){
+# 	sed -i '/exit 0/d' /etc/rc.local
+# 	echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
+# 	[[ ${release}  == "debian" ]] && echo -e "exit 0" >> /etc/rc.local
+# }
 runSocat(){
-	nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &
+    if [[ $1 == "TCP6" ]] || [[ $1 == "UDP6" ]]; then
+        nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:[${socatip}]:${Socatport1} >> ${socat_log_file} 2>&1 &
+    else
+        nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &
+    fi
 }
+
 addLocal(){
-	sed -i '/exit 0/d' /etc/rc.local
-	echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
-	[[ ${release}  == "debian" ]] && echo -e "exit 0" >> /etc/rc.local
+    sed -i '/exit 0/d' /etc/rc.local
+    if [[ $1 == "TCP6" ]] || [[ $1 == "UDP6" ]]; then
+        echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:[${socatip}]:${Socatport1} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
+    else
+        echo -e "nohup socat $1-LISTEN:${Socatport},reuseaddr,fork $1:${socatip}:${Socatport1} >> ${socat_log_file} 2>&1 &" >> /etc/rc.local
+    fi
+    [[ ${release}  == "debian" ]] && echo -e "exit 0" >> /etc/rc.local
 }
 # 查看Socat列表
 listSocat(){
