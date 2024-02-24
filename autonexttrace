@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Usage:
+# bash <(curl -Lso- https://cdn.jsdelivr.net/gh/drzazi/scripts@main/autonexttrace.sh)
+
+footer() {
+  BLUE="\033[34m"; NC='\033[0m'
+  printf "%b\n" " Supported by: ${BLUE}https://vps.dance${NC}"
+  printf "%-37s\n" "-" | sed 's/\s/-/g'
+}
+
+# install nexttrace
+if [ ! -f "/usr/bin/nexttrace" ]; then
+  bash <(curl -Lso- https://sh.vps.dance/tools.sh) nexttrace -p
+fi
+
+next() {
+  printf "%-70s\n" "-" | sed 's/\s/-/g'
+}
+
+clear
+next
+
+ipv4="$(curl -m 5 -fsL4 http://ipv4.ip.sb)"
+ipv6="$(curl -m 5 -fsL6 http://ipv6.ip.sb)"
+
+# https://ispip.clang.cn/
+# gd.189.cn, gd.10086.cn
+ip_list=(122.143.8.41 123.172.127.217 111.27.127.176 202.198.16.25)
+ip_addr=(吉林联通 吉林电信 吉林移动 吉大教育网)
+
+if [ -z "$ipv4" ]; then
+ip_list=(2001:da8:b000::25)
+ip_addr=(吉大教育网v6)
+fi
+
+# ip_len=${#ip_list[@]}
+
+cancel() { exit 1; }
+trap cancel SIGINT SIGTERM
+
+for i in "${!ip_addr[@]}"; do
+	echo ${ip_addr[$i]}
+	nexttrace -T -q 1 ${ip_list[$i]} \
+    | sed '/^.*Geo Data.*$/d'
+	next
+done
+footer
