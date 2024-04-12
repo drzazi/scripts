@@ -8,3 +8,9 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/drzazi/scripts/
 ```
 
 使用[copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot)修改自[socat.sh](https://github.com/ToyoDAdoubiBackup/doubi/blob/master/socat.sh)
+
+
+
+```bash
+wget -N --no-check-certificate https://raw.githubusercontent.com/drzazi/scripts/main/fail2ban.sh && chmod +x fail2ban.sh && bash fail2ban.sh
+```
