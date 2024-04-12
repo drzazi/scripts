@@ -19,6 +19,7 @@ ignoreip = 127.0.0.1/8
 
 [sshd]
 enabled = true
+backend=systemd
 port = 22
 filter = sshd
 logpath = /var/log/auth.log
@@ -39,6 +40,7 @@ ignoreip = 127.0.0.1/8
 
 [sshd]
 enabled = true
+backend=systemd
 port = 22
 filter = sshd
 logpath = /var/log/secure
