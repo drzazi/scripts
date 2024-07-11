@@ -12,7 +12,7 @@ else
 fi
 
 # Get SSH port dynamically
-SSHD_PORT=$(sshd -T | grep "^port " | awk '{print $2}')
+SSHD_PORT=$(sshd -T | grep "^port "  | head -n 1 | awk '{print $2}')
 
 # Install fail2ban
 if [ "$OS" = "Debian" ]; then
